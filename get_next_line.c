@@ -6,7 +6,7 @@
 /*   By: ajubert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:06:11 by ajubert           #+#    #+#             */
-/*   Updated: 2016/01/18 17:59:23 by ajubert          ###   ########.fr       */
+/*   Updated: 2016/01/18 18:49:52 by ajubert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int		extractbuffer(char **str1, int fd)
 	char	str[BUFF_SIZE + 1];
 	int		strsize;
 	int		i;
+//	char	*tmp;
 
 	i = 0;
 	strsize = read(fd, str, BUFF_SIZE);
@@ -25,6 +26,9 @@ int		extractbuffer(char **str1, int fd)
 	if (strsize == 0)
 		return (0);
 	str[strsize] = '\0';
+//	tmp = str1[0];
+//	str1[0] = ft_strjoin(tmp, str);
+//	ft_strdel(&tmp);
 	str1[0] = ft_strjoin(str1[0], str);
 	strsize = ft_strlen(str1[0]);
 	return (strsize);
