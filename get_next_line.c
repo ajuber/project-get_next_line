@@ -6,7 +6,7 @@
 /*   By: ajubert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:06:11 by ajubert           #+#    #+#             */
-/*   Updated: 2016/01/18 16:07:48 by ajubert          ###   ########.fr       */
+/*   Updated: 2016/01/18 17:59:23 by ajubert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,18 @@ int		extractbuffer(char **str1, int fd)
 void	get_previous_str(char **str)
 {
 	int i;
-	int size;
-	int strsize;
+	int size[2]; //size[1] = strsize
 
-	strsize = 0;
 	i = 0;
 	while (str[0][i] && str[0][i] != '\n')
 		i++;
 	if (str[0][i] == '\n')
 	{
 		i++;
-		size = ft_strlen(&str[0][i]);
-		ft_memmove(str[0], &str[0][i], size);
-		strsize = ft_strlen(str[0]);
-		ft_bzero(&str[0][size], strsize - size);
+		size[0] = ft_strlen(&str[0][i]);
+		ft_memmove(str[0], &str[0][i], size[0]);
+		size[1] = ft_strlen(str[0]);
+		ft_bzero(&str[0][size[0]], size[1] - size[0]);
 	}
 	else
 	{
@@ -55,7 +53,7 @@ void	get_previous_str(char **str)
 	}
 }
 
-void	next_calc(int size, char **line, char **str, int *test)
+int		next_calc(int size, char **line, char **str, int *test)
 {
 	int i;
 
@@ -72,6 +70,7 @@ void	next_calc(int size, char **line, char **str, int *test)
 		i++;
 		*test = 1;
 	}
+	return (i);
 }
 
 int		calc_get_next_line(char **str, int fd, char **line, int *fd1)
@@ -94,7 +93,7 @@ int		calc_get_next_line(char **str, int fd, char **line, int *fd1)
 			return (0);
 		}
 		size = strsize;
-		next_calc(size, line, str, &test);
+		i = next_calc(size, line, str, &test);
 		*fd1 = fd;
 		if ((line[0][i] == '\0' && i < BUFF_SIZE) || test == 1 || strsize == 0)
 			return (1);
