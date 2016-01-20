@@ -6,7 +6,7 @@
 /*   By: ajubert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:06:11 by ajubert           #+#    #+#             */
-/*   Updated: 2016/01/18 18:49:52 by ajubert          ###   ########.fr       */
+/*   Updated: 2016/01/20 16:58:47 by ajubert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		extractbuffer(char **str1, int fd)
 	char	str[BUFF_SIZE + 1];
 	int		strsize;
 	int		i;
-//	char	*tmp;
+	char	*tmp;
 
 	i = 0;
 	strsize = read(fd, str, BUFF_SIZE);
@@ -26,15 +26,15 @@ int		extractbuffer(char **str1, int fd)
 	if (strsize == 0)
 		return (0);
 	str[strsize] = '\0';
-//	tmp = str1[0];
-//	str1[0] = ft_strjoin(tmp, str);
-//	ft_strdel(&tmp);
-	str1[0] = ft_strjoin(str1[0], str);
+	tmp = &str1[0][0];
+	str1[0] = ft_strjoin(tmp, str);
+	ft_strdel(&tmp);
+//	str1[0] = ft_strjoin(str1[0], str);
 	strsize = ft_strlen(str1[0]);
 	return (strsize);
 }
 
-void	get_previous_str(char **str)
+int		get_previous_str(char **str, char **line)
 {
 	int i;
 	int size[2]; //size[1] = strsize
@@ -51,10 +51,13 @@ void	get_previous_str(char **str)
 		ft_bzero(&str[0][size[0]], size[1] - size[0]);
 	}
 	else
+		str[0] = ft_strdup("\0");
+	if (str[0][0] == '\n')
 	{
-		str[0] = (char *)malloc(1);
-		str[0][0] = '\0';
+		line[0] = ft_strdup("\0");
+		return (1);
 	}
+	return (0);
 }
 
 int		next_calc(int size, char **line, char **str, int *test)
@@ -63,8 +66,7 @@ int		next_calc(int size, char **line, char **str, int *test)
 
 	if (size == 0)
 		size = ft_strlen(str[0]);
-	line[0] = (char *)malloc(size);
-	line[0] = ft_strcpy(line[0], str[0]);
+	line[0] = ft_strdup(str[0]);
 	i = 0;
 	while (line[0][i] && line[0][i] != '\n')
 		i++;
@@ -92,8 +94,7 @@ int		calc_get_next_line(char **str, int fd, char **line, int *fd1)
 			return (-1);
 		if (str[0][0] == 0)
 		{
-			line[0] = (char *)malloc(1);
-			line[0][0] = '\0';
+			line[0] = ft_strdup("\0");
 			return (0);
 		}
 		size = strsize;
@@ -114,20 +115,16 @@ int		get_next_line(int const fd, char **line)
 		return (-1);
 	if (fd1 != fd)
 	{
-		str = (char **)malloc(sizeof(char *) * 1);
-		*str = (char *)malloc(1);
-		str[0][0] = '\0';
+		if (!(str = (char **)malloc(sizeof(char *) * 1)))
+			return (-1);
+		str[0] = ft_strdup("\0");
 	}
-	else
-	{
-		get_previous_str(str);
-		if (str[0][0] == '\n')
-		{
-			line[0] = (char *)malloc(1);
-			line[0][0] = '\0';
-			return (1);
-		}
-	}
+	else if (get_previous_str(str, line))
+		return (1);
 	test = calc_get_next_line(str, fd, line, &fd1);
-	return (test == 1 ? 1 : (test == 0 ? 0 : -1));
+	if (test == 1)
+		return (1);
+	if (test == 0)
+		return (0);
+	return (-1);
 }
