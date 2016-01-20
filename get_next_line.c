@@ -6,7 +6,7 @@
 /*   By: ajubert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:06:11 by ajubert           #+#    #+#             */
-/*   Updated: 2016/01/20 16:58:47 by ajubert          ###   ########.fr       */
+/*   Updated: 2016/01/20 18:09:53 by ajubert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int		extractbuffer(char **str1, int fd)
 	tmp = &str1[0][0];
 	str1[0] = ft_strjoin(tmp, str);
 	ft_strdel(&tmp);
-//	str1[0] = ft_strjoin(str1[0], str);
 	strsize = ft_strlen(str1[0]);
 	return (strsize);
 }
@@ -37,7 +36,7 @@ int		extractbuffer(char **str1, int fd)
 int		get_previous_str(char **str, char **line)
 {
 	int i;
-	int size[2]; //size[1] = strsize
+	int size[2];
 
 	i = 0;
 	while (str[0][i] && str[0][i] != '\n')
