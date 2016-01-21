@@ -33,30 +33,44 @@ int		extractbuffer(char **str1, int fd)
 	return (strsize);
 }
 
-int		get_previous_str(char **str, char **line)
+void	get_previous_str(char **str, char **line)
 {
-	int i;
-	int size[2];
+	int		i;
+	int		size[2];
+	char	*tmp;
 
 	i = 0;
-	while (str[0][i] && str[0][i] != '\n')
-		i++;
-	if (str[0][i] == '\n')
+//	while (str[0][i] && str[0][i] != '\n')
+//		i++;
+	//tmp = &str[0][i];
+	/*if (str[0][i] == '\n')
 	{
 		i++;
 		size[0] = ft_strlen(&str[0][i]);
 		ft_memmove(str[0], &str[0][i], size[0]);
 		size[1] = ft_strlen(str[0]);
 		ft_bzero(&str[0][size[0]], size[1] - size[0]);
-	}
-	else
-		str[0] = ft_strdup("\0");
-	if (str[0][0] == '\n')
-	{
-		line[0] = ft_strdup("\0");
-		return (1);
-	}
-	return (0);
+	}*/
+//	if (tmp[0] == '\n')
+//	{
+//		ft_memmove(str[0], &tmp[1], ft_strlen(&tmp[1]));
+//		ft_bzero(&str[0][ft_strlen(&tmp[1])], ft_strlen(str[0]) - ft_strlen(&tmp[1]));
+//	}
+//	else
+//		str[0] = ft_strdup("\0");
+	//if (str[0][0] == '\n')
+	//{
+	//	line[0] = ft_strdup("\0");
+	//	return (1);
+	//}
+	//return (0);
+	tmp = ft_strdup(str[0]);
+	ft_bzero(str[0], ft_strlen(str[0]));
+	while (tmp[i] && tmp[i] != '\n')
+		i++;
+	if (tmp[++i - 1] == '\n')
+		ft_strcpy(str[0], &tmp[i]);
+	ft_strdel(&tmp);
 }
 
 int		next_calc(int size, char **line, char **str, int *test)
@@ -118,9 +132,10 @@ int		get_next_line(int const fd, char **line)
 			return (-1);
 		str[0] = ft_strdup("\0");
 	}
-	else if (get_previous_str(str, line))
-		return (1);
+//	else if (get_previous_str(str, line))
+//		return (1);
 	test = calc_get_next_line(str, fd, line, &fd1);
+	get_previous_str(str, line);
 	if (test == 1)
 		return (1);
 	if (test == 0)
