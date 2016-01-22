@@ -6,7 +6,7 @@
 /*   By: ajubert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:06:11 by ajubert           #+#    #+#             */
-/*   Updated: 2016/01/20 18:09:53 by ajubert          ###   ########.fr       */
+/*   Updated: 2016/01/22 16:30:21 by ajubert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,58 +28,34 @@ int		extractbuffer(char **str1, int fd)
 	str[strsize] = '\0';
 	tmp = &str1[0][0];
 	str1[0] = ft_strjoin(tmp, str);
-	ft_strdel(&tmp);
+	free(tmp);
 	strsize = ft_strlen(str1[0]);
 	return (strsize);
 }
 
-void	get_previous_str(char **str, char **line)
+void	get_previous_str(char **str)
 {
 	int		i;
-	int		size[2];
 	char	*tmp;
 
 	i = 0;
-//	while (str[0][i] && str[0][i] != '\n')
-//		i++;
-	//tmp = &str[0][i];
-	/*if (str[0][i] == '\n')
-	{
-		i++;
-		size[0] = ft_strlen(&str[0][i]);
-		ft_memmove(str[0], &str[0][i], size[0]);
-		size[1] = ft_strlen(str[0]);
-		ft_bzero(&str[0][size[0]], size[1] - size[0]);
-	}*/
-//	if (tmp[0] == '\n')
-//	{
-//		ft_memmove(str[0], &tmp[1], ft_strlen(&tmp[1]));
-//		ft_bzero(&str[0][ft_strlen(&tmp[1])], ft_strlen(str[0]) - ft_strlen(&tmp[1]));
-//	}
-//	else
-//		str[0] = ft_strdup("\0");
-	//if (str[0][0] == '\n')
-	//{
-	//	line[0] = ft_strdup("\0");
-	//	return (1);
-	//}
-	//return (0);
 	tmp = ft_strdup(str[0]);
 	ft_bzero(str[0], ft_strlen(str[0]));
 	while (tmp[i] && tmp[i] != '\n')
 		i++;
 	if (tmp[++i - 1] == '\n')
 		ft_strcpy(str[0], &tmp[i]);
-	ft_strdel(&tmp);
+	free(tmp);
 }
 
-int		next_calc(int size, char **line, char **str, int *test)
+int		next_calc(char **line, char **str, int *test)
 {
-	int i;
+	int		i;
+	char	*tmp;
 
-	if (size == 0)
-		size = ft_strlen(str[0]);
+	tmp = line[0];
 	line[0] = ft_strdup(str[0]);
+	free(tmp);
 	i = 0;
 	while (line[0][i] && line[0][i] != '\n')
 		i++;
@@ -97,7 +73,6 @@ int		calc_get_next_line(char **str, int fd, char **line, int *fd1)
 	int test;
 	int strsize;
 	int i;
-	int size;
 
 	while (1)
 	{
@@ -106,12 +81,8 @@ int		calc_get_next_line(char **str, int fd, char **line, int *fd1)
 		if (strsize == -1)
 			return (-1);
 		if (str[0][0] == 0)
-		{
-			line[0] = ft_strdup("\0");
 			return (0);
-		}
-		size = strsize;
-		i = next_calc(size, line, str, &test);
+		i = next_calc(line, str, &test);
 		*fd1 = fd;
 		if ((line[0][i] == '\0' && i < BUFF_SIZE) || test == 1 || strsize == 0)
 			return (1);
@@ -126,16 +97,15 @@ int		get_next_line(int const fd, char **line)
 
 	if (fd < 0 || line == NULL || BUFF_SIZE <= 0)
 		return (-1);
+	line[0] = ft_strdup("\0");
 	if (fd1 != fd)
 	{
 		if (!(str = (char **)malloc(sizeof(char *) * 1)))
 			return (-1);
 		str[0] = ft_strdup("\0");
 	}
-//	else if (get_previous_str(str, line))
-//		return (1);
 	test = calc_get_next_line(str, fd, line, &fd1);
-	get_previous_str(str, line);
+	get_previous_str(str);
 	if (test == 1)
 		return (1);
 	if (test == 0)

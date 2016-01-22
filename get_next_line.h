@@ -6,7 +6,7 @@
 /*   By: ajubert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 13:35:51 by ajubert           #+#    #+#             */
-/*   Updated: 2016/01/18 16:06:23 by ajubert          ###   ########.fr       */
+/*   Updated: 2016/01/22 16:34:06 by ajubert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
-# include <fcntl.h>
 # include "libft.h"
 
-# define BUFF_SIZE 10
+# define BUFF_SIZE 32
 
 int		get_next_line(int const fd, char **line);
 
