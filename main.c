@@ -36,8 +36,5 @@ int		main(int argc, char **argv)
 		ft_putendl(line[0]);
 	}
 	free(line);
-	while (42)
-	{
-	}
 	return (0);
 }

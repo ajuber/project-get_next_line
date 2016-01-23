@@ -16,10 +16,8 @@ int		extractbuffer(char **str1, int fd)
 {
 	char	str[BUFF_SIZE + 1];
 	int		strsize;
-	int		i;
 	char	*tmp;
 
-	i = 0;
 	strsize = read(fd, str, BUFF_SIZE);
 	if (strsize < 0)
 		return (-1);
