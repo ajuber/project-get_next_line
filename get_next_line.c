@@ -28,6 +28,7 @@ int		extractbuffer(char **str1, int fd)
 	str1[0] = ft_strjoin(tmp, str);
 	free(tmp);
 	strsize = ft_strlen(str1[0]);
+	
 	return (strsize);
 }
 
